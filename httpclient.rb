@@ -1,7 +1,6 @@
 require 'net/http'
 require 'json'
-require 'pry'
-require './parser'
+require './parser.rb'
 
 class HttpClient
   XOM_URL = 'https://xom-workbench.herokuapp.com/api/report'.freeze
@@ -16,13 +15,15 @@ class HttpClient
       puts '====================='
       puts res.inspect
       puts '====================='
-      @repsonse = res
+      @response = res
     else
       raise StandardError.new "Couldn't fetch URL"
     end
   end
 
   def parse
+    parser = ::Parser.new(@response.body)
+    parser.parse
   end
 
   private
@@ -56,5 +57,6 @@ class HttpClient
   end
 end
 
-
-HttpClient.new.fetch
+client = HttpClient.new
+client.fetch
+client.parse
