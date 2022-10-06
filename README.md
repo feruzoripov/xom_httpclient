@@ -2,7 +2,7 @@
 
 Task description:
 - Connect to the remote API with generated an access token.
-- Download the report, pars it and print (io / screen) in format: 'URL - UNIQ CONNECTIONS COUNT' (ex: '/home - 13')
+- Download the report, pars it and print (io / screen) in format: `'URL - UNIQ CONNECTIONS COUNT' (ex: '/home - 13')`
 
 ## Run
 
