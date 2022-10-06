@@ -1,6 +1,5 @@
 require 'net/http'
 require 'json'
-require './parser.rb'
 
 class HttpClient
   XOM_URL = 'https://xom-workbench.herokuapp.com/api/report'.freeze
@@ -63,8 +62,3 @@ class HttpClient
     @hmac ||= OpenSSL::HMAC.hexdigest("SHA256", XOM_KEY, request_params.to_json)
   end
 end
-
-parser = Parser.new
-client = HttpClient.new(parser)
-client.fetch
-client.print
