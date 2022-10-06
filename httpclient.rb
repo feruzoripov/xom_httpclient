@@ -6,6 +6,10 @@ class HttpClient
   XOM_URL = 'https://xom-workbench.herokuapp.com/api/report'.freeze
   XOM_KEY = ENV['XOM_KEY']
 
+  def initialize(parser)
+    @parser = parser
+  end
+
   def fetch
     res = Net::HTTP.start(url.hostname, url.port, :use_ssl => url.scheme == 'https') do |http|
       http.request(set_headers)
@@ -13,7 +17,7 @@ class HttpClient
 
     if res.is_a?(Net::HTTPSuccess)
       puts '====================='
-      puts res.inspect
+      puts "Response code: #{res.code}"
       puts '====================='
       @response = res
     else
@@ -21,15 +25,18 @@ class HttpClient
     end
   end
 
-  def parse
-    parser = ::Parser.new(@response.body)
-    parser.parse
+  def print
+    parse
+    @parser.calculate_unique_visits.each do |url, visits|
+      puts "/#{url} - #{visits}"
+    end
   end
 
   private
 
-  def http_client
-    
+  def parse
+    @parser.document = @response.body
+    @parser.parse
   end
 
   def url
@@ -57,6 +64,7 @@ class HttpClient
   end
 end
 
-client = HttpClient.new
+parser = Parser.new
+client = HttpClient.new(parser)
 client.fetch
-client.parse
+client.print
